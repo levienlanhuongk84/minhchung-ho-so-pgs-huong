@@ -5,15 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#660066">
 <title>Hồ sơ minh chứng</title>
 <style>
+/* Màu thương hiệu Thẩm mỹ Hoàng Tuấn: tím #660066, cam #F37E21 (thammyhoangtuan.vn) */
 :root{
-  --bg:#f3f4f2;--panel:#ffffff;--ink:#1d2730;--muted:#5d6b76;--line:#dcdfdb;
-  --accent:#1f4e6b;--accent-ink:#ffffff;--soft:#e7eef2;--mark:#fde68a;--err:#a4262c;--stage:#d9dcd8;
+  --bg:#faf6fa;--panel:#ffffff;--ink:#252525;--muted:#5d4a5d;--line:#e7d9e7;
+  --accent:#660066;--accent-ink:#ffffff;--soft:#f4ecf4;--mark:#ffd7a8;--err:#b3261e;--stage:#e7dce7;
+  --fill:#660066;--fill-fg:#ffffff;--orange:#f37e21;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#14191d;--panel:#1c2328;--ink:#e6eaec;--muted:#9aa7b0;--line:#2f383f;
-  --accent:#7fb6d6;--accent-ink:#0e1a22;--soft:#23313a;--mark:#7a5d10;--err:#f08a8f;--stage:#0f1417;
+  --bg:#141014;--panel:#1c161c;--ink:#ede5ed;--muted:#bca8bc;--line:#3a2e3a;
+  --accent:#c46fc4;--accent-ink:#1b0a1b;--soft:#2c212c;--mark:#7a4a16;--err:#f08a8f;--stage:#0f0b0f;
+  --fill:#5a2a5a;--fill-fg:#f6eaf6;--orange:#f79a4e;
 }}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
@@ -21,11 +25,12 @@ body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMac
 button,input{font:inherit;color:inherit}
 a{color:var(--accent)}
 [hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--orange);outline-offset:1px}
 
 /* Cổng mật khẩu */
 #gate{min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
-#gate form{width:min(400px,100%);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px 24px}
-#gate h1{font-size:21px;margin:0 0 6px}
+#gate form{width:min(400px,100%);background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--orange);border-radius:10px;padding:28px 24px}
+#gate h1{font-size:21px;margin:0 0 6px;color:var(--accent)}
 #gate p{margin:0 0 18px;color:var(--muted)}
 #gate label{display:block;font-weight:600;margin-bottom:6px}
 #gate input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:7px;background:var(--bg)}
@@ -35,18 +40,18 @@ a{color:var(--accent)}
 
 /* Khung đọc */
 #app{height:100vh;height:100dvh;display:grid;grid-template-rows:auto auto 1fr;grid-template-columns:350px minmax(0,1fr);grid-template-areas:"head head" "side ctx" "side view"}
-#head{grid-area:head;display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line)}
+#head{grid-area:head;display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--fill);color:var(--fill-fg);border-bottom:3px solid var(--orange)}
 #head h1{font-size:15px;font-weight:650;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ib{min-width:36px;height:36px;padding:0 9px;border:1px solid var(--line);border-radius:7px;background:transparent;cursor:pointer}
-.ib:hover{background:var(--soft)}
+.ib{min-width:36px;height:36px;padding:0 9px;border:1px solid rgba(255,255,255,.4);border-radius:7px;background:transparent;color:var(--fill-fg);cursor:pointer}
+.ib:hover{background:rgba(255,255,255,.16)}
 #menu{display:none}
-.pager{display:flex;align-items:center;gap:5px;white-space:nowrap;color:var(--muted)}
+.pager{display:flex;align-items:center;gap:5px;white-space:nowrap;color:var(--fill-fg)}
 .pager input{width:62px;height:36px;text-align:center;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
 
 #side{grid-area:side;display:flex;flex-direction:column;min-height:0;background:var(--panel);border-right:1px solid var(--line)}
 #tabs{display:flex;border-bottom:1px solid var(--line)}
 #tabs button{flex:1;padding:11px 4px;border:0;border-bottom:3px solid transparent;background:none;cursor:pointer;color:var(--muted);font-weight:600}
-#tabs button[aria-selected=true]{color:var(--accent);border-bottom-color:var(--accent)}
+#tabs button[aria-selected=true]{color:var(--accent);border-bottom-color:var(--orange)}
 .panel{flex:1;min-height:0;overflow:auto;padding:8px 16px 24px 8px}
 
 /* Mục lục */
@@ -54,8 +59,8 @@ a{color:var(--accent)}
 .t a{flex:1;min-width:0;padding:6px 6px;text-decoration:none;color:inherit;display:flex;gap:8px;justify-content:space-between;cursor:pointer}
 .t a span.pn{color:var(--muted);font-size:12.5px;flex:none;padding-top:1px}
 .t:hover{background:var(--soft)}
-.t.on{background:var(--soft);box-shadow:inset 3px 0 0 var(--accent)}
-.t.on a{font-weight:600}
+.t.on{background:var(--soft);box-shadow:inset 3px 0 0 var(--orange)}
+.t.on a{font-weight:600;color:var(--accent)}
 .t button{flex:none;width:26px;height:30px;border:0;background:none;cursor:pointer;color:var(--muted)}
 .t .sp{flex:none;width:26px}
 .l1>.t a{font-weight:650}
@@ -64,9 +69,9 @@ a{color:var(--accent)}
 
 /* Bài báo */
 .arts-note{padding:6px 6px 10px;color:var(--muted);font-size:13.5px}
-.arts-h{font-weight:700;margin:14px 6px 6px}
+.arts-h{font-weight:700;margin:14px 6px 6px;color:var(--accent)}
 .card{border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px;scroll-margin-top:8px}
-.card.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.card.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--orange)}
 .card .tt{font-weight:600;font-size:14px}
 .card .mt{color:var(--muted);font-size:13px;margin-top:3px}
 .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
