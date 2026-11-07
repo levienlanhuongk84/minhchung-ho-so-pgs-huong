@@ -162,8 +162,40 @@ table.jt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
   .jt td,.jt td:last-child,.jt td.no,.jt td:nth-child(3){border:0;padding:3px 8px;width:100%}
   .jt .acts{flex-direction:row}
   .jt td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;color:var(--muted);font-weight:600}
-  .jt .no::before{content:"STT danh mục 2026: "}
+  .jt td.no::before{content:"STT danh mục 2026: "}
 }
+/* Tiêu chí Hương */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:12px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.kpi .k{font-size:12.5px;color:var(--muted)}
+.kpi .v{font-size:26px;font-weight:700;line-height:1.2;color:var(--accent);font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:600;color:var(--muted)}
+.kpi .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+.kpi.bad{border-left:4px solid var(--err)}.kpi.good{border-left:4px solid #1a8a52}.kpi.warn{border-left:4px solid var(--orange)}
+.bar{height:8px;background:var(--soft);border-radius:4px;overflow:hidden;margin-top:6px;display:flex}
+.bar i{display:block;height:100%}
+.bar .b1{background:var(--accent)}.bar .b2{background:var(--orange)}.bar .b3{background:#9b86b8}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);margin-top:4px}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:var(--c)}
+.opts{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;background:var(--soft);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:13.5px}
+.opts label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.opts input[type=date]{padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+#sc-body select,#sc-body input[type=number],.scf input,.scf select{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font-size:13.5px;max-width:100%}
+#sc-body input[type=number]{width:96px}
+.scf{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;margin:8px 0 14px}
+.scf label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.scf .wide{grid-column:1/-1}
+.scf .row{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gap{display:grid;gap:8px}
+.gap .alert b{font-size:14px}
+.tag.pend{background:#e7eefb;color:#1f4f99}
+@media (prefers-color-scheme:dark){.tag.pend{background:#1a2740;color:#9dbbf0}}
+.jt td.c{white-space:nowrap}
+.sc-save{font-size:12.5px;color:var(--muted);margin-left:6px}
+.jt.sc td:last-child,.jt.sc td:nth-child(3){width:auto}
+.jt.sc td.c{width:56px;color:var(--muted);font-variant-numeric:tabular-nums}
+.jt.sc td.r{width:210px}
+@media (max-width:820px){.jt.sc td.c,.jt.sc td.r{width:100%}}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:calc(100% - 32px);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;z-index:40}
 #toast a{color:inherit;font-weight:600}
 
@@ -216,8 +248,10 @@ table.jt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
       <button role="tab" data-tab="arts" aria-selected="false">Bài báo</button>
       <button role="tab" data-tab="find" aria-selected="false">Tìm kiếm</button>
       <button role="tab" data-tab="reg" aria-selected="false">Quy định PGS</button>
+      <button role="tab" data-tab="sc" aria-selected="false">Tiêu chí Hương</button>
     </div>
     <div class="panel rnav" id="tab-reg" hidden></div>
+    <div class="panel rnav" id="tab-sc" hidden></div>
     <div class="panel" id="tab-toc"></div>
     <div class="panel" id="tab-arts" hidden></div>
     <div class="panel" id="tab-find" hidden>
@@ -228,7 +262,7 @@ table.jt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
   </aside>
   <div id="ctx"></div>
   <main id="view"><div id="pages"></div></main>
-  <section id="reg" hidden><div class="wrap" id="reg-body"></div></section>
+  <section id="reg" hidden><div class="wrap" id="reg-body"></div><div class="wrap" id="sc-body" hidden></div></section>
 </div>
 <div id="toast" hidden role="status"></div>
 
@@ -495,11 +529,244 @@ function buildReg(){
   $('#rq').addEventListener('input',filterJ);filterJ();
 }
 async function showReg(){
-  setReg(true);
+  setReg(true);showView('reg');
   if(R) return;
   $('#reg-body').innerHTML='<p class="lead">Đang giải mã dữ liệu…</p>';$('#tab-reg').innerHTML='';
   try{R=JSON.parse(dec.decode(await getBin('r.bin')));buildReg()}
   catch(e){$('#reg-body').innerHTML='<p class="lead">Không tải được dữ liệu. Kiểm tra mạng rồi bấm lại tab Quy định PGS.</p>'}
+}
+
+/* ---------- Tiêu chí Hương ---------- */
+let SC=null, LOC=null, SCV=false, SCK=null;
+const LKEY='sc-loc-v1';
+const ROLE_MAIN=['Tác giả thứ nhất','Tác giả liên hệ','Tác giả thứ nhất, tác giả liên hệ','Tác giả duy nhất'];
+function blankLoc(){return {add:{pubs:[],books:[],sup:[]},ov:{},teach:{},prog:{},comp:{},gen:{},opt:{strict:false,field:false},deadline:null,at:null}}
+async function scKey(){
+  if(SCK) return SCK;
+  const k=store.get('k'); if(!k) return null;
+  try{SCK=await crypto.subtle.importKey('raw',Uint8Array.from(atob(k),c=>c.charCodeAt(0)),{name:'AES-GCM'},false,['encrypt','decrypt'])}catch(e){SCK=null}
+  return SCK;
+}
+async function loadLoc(){
+  LOC=blankLoc();
+  let s=null; try{s=localStorage.getItem(LKEY)}catch(e){}
+  if(!s) return;
+  try{
+    const b=Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+    const o=JSON.parse(dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b.subarray(0,12)},KEY,b.subarray(12))));
+    LOC=Object.assign(blankLoc(),o);LOC.add=Object.assign({pubs:[],books:[],sup:[]},o.add||{});LOC.opt=Object.assign({strict:false,field:false},o.opt||{});
+  }catch(e){LOC=blankLoc()}
+}
+async function saveLoc(){
+  LOC.at=new Date().toISOString();
+  const k=await scKey(), m=$('#sc-saved');
+  if(!k){if(m)m.textContent='Không lưu được trên trình duyệt này; hãy dùng nút Xuất dữ liệu.';return}
+  try{
+    const iv=crypto.getRandomValues(new Uint8Array(12));
+    const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},k,enc.encode(JSON.stringify(LOC))));
+    const all=new Uint8Array(12+ct.length);all.set(iv);all.set(ct,12);
+    let bin='';for(let i=0;i<all.length;i+=8192)bin+=String.fromCharCode(...all.subarray(i,i+8192));
+    localStorage.setItem(LKEY,btoa(bin));
+    if(m)m.textContent='Đã lưu trên máy này lúc '+new Date().toLocaleTimeString('vi-VN');
+  }catch(e){if(m)m.textContent='Không lưu được trên trình duyệt này; hãy dùng nút Xuất dữ liệu.'}
+}
+function isNNDS(j){const s=nfs(j||'');return /doi song/.test(s)||/0868 3409/.test(s)}
+function pubs(){return SC.pubs.map(p=>Object.assign({},p,LOC.ov['p:'+p.n]||{})).concat(LOC.add.pubs.map(p=>Object.assign({user:1},p)))}
+function books(){return SC.books.map(b=>Object.assign({},b,LOC.ov['b:'+b.id]||{})).concat(LOC.add.books.map(b=>Object.assign({user:1},b)))}
+function sups(){return SC.sup.map(s=>Object.assign({},s,LOC.ov['s:'+s.id]||{})).concat(LOC.add.sup.map(s=>Object.assign({user:1},s)))}
+/* Lý do tính hoặc không tính loại 1, theo PL I mục III. ignoreSt: tính thử khi bài đã đăng */
+function judge(p,ignoreSt){
+  const o=LOC.opt;
+  if(!ignoreSt&&p.st!=='pub') return {c:false,t:'pend',why:'Đang chờ đăng; sẽ tính khi có số xuất bản'};
+  if(p.main===false) return {c:false,t:'no',why:p.role==='Cần xác nhận'?'Chưa rõ vai trò tác giả':'Đồng tác giả, không phải tác giả chính'};
+  if(p.main==='cond') return {c:false,t:'chk',why:'Chờ bản in ghi tác giả liên hệ'};
+  if(p.kind==='proc'&&!p.scopus) return {c:false,t:'no',why:'Kỷ yếu không thuộc WoS/Scopus'};
+  if(p.kind==='dom'&&!p.l1j) return {c:false,t:'no',why:'Tạp chí không có mức tối đa 1,0 điểm trong danh mục HĐGS 2025'};
+  if(p.kind==='dom'&&p.nnds&&o.strict) return {c:false,t:'no',why:'Kịch bản khắt khe: NNĐS không còn là loại 1'};
+  if(p.risk==='field'&&o.field) return {c:false,t:'no',why:'Đã loại theo rủi ro phù hợp ngành'};
+  const intl=p.kind==='intl'||(p.kind==='proc'&&p.scopus);
+  return {c:true,t:'ok',why:intl?'Tính loại 1, quốc tế uy tín':'Tính loại 1, trong nước',intl};
+}
+function bookSub(b){return b.role==='chu'?2:1}
+function deadlineDate(){return LOC.deadline||SC.deadline}
+function compute(){
+  const P=pubs(), B=books(), S=sups();
+  let intl=0,dom=0,procI=0,pi=0,pd=0;
+  P.forEach(p=>{const j=judge(p);p.jd=j;
+    if(j.c){if(p.kind==='proc')procI++;else if(j.intl)intl++;else dom++}
+    else if(p.st!=='pub'){const k=judge(p,true);p.jdp=k;if(k.c){k.intl?pi++:pd++}}});
+  const procCap=Math.floor(SC.req.intl/3); const procUsed=Math.min(procI,procCap);
+  const intlAll=intl+procUsed;
+  const bsub=B.filter(b=>b.st==='pub').reduce((s,b)=>s+bookSub(b),0);
+  const bpend=B.filter(b=>b.st!=='pub').reduce((s,b)=>s+bookSub(b),0);
+  const l1=intlAll+dom+bsub;
+  const supW=S.filter(s=>s.st==='qd'||s.st==='xn').reduce((t,s)=>t+(s.role==='chinh'?1:.5),0);
+  const supP=S.filter(s=>s.st==='bv').reduce((t,s)=>t+(s.role==='chinh'?1:.5),0);
+  const th=SC.teach.map(t=>{const v=LOC.teach[t.y];return {y:t.y,h:v==null||v===''?null:+v}});
+  const n180=th.filter(t=>t.h!=null&&t.h>=180).length, n90=th.filter(t=>t.h!=null&&t.h>=90).length, nfill=th.filter(t=>t.h!=null).length;
+  const teachOk=n180>=3||n90>=6;
+  const prog=SC.prog.map(g=>Object.assign({},g,LOC.prog[g.id]!=null?{ok:LOC.prog[g.id]}:{}));
+  const progOk=prog.some(g=>g.ok);
+  const phd=new Date(SC.phd), dl=new Date(deadlineDate()), p3=new Date(phd);p3.setFullYear(p3.getFullYear()+3);
+  const phdOk=dl>=p3;
+  return {P,B,S,intl,intlAll,dom,procI,procUsed,bsub,bpend,l1,pi,pd,supW,supP,th,n180,n90,nfill,teachOk,prog,progOk,phdOk,p3,dl};
+}
+const fmtD=d=>d.toLocaleDateString('vi-VN');
+const T=(k,t)=>'<span class="tag '+k+'">'+esc(t)+'</span>';
+const nn=x=>String(x).replace('.',',');
+function kpi(cls,k,v,req,d,bar){return '<div class="kpi '+cls+'"><div class="k">'+k+'</div><div class="v">'+v+(req!=null?' <small>/ '+req+'</small>':'')+'</div>'+(bar||'')+'<div class="d">'+d+'</div></div>'}
+function bar(parts,max){return '<div class="bar">'+parts.map(([v,c])=>'<i class="'+c+'" style="width:'+Math.min(100,v/max*100)+'%"></i>').join('')+'</div>'}
+function readiness(){
+  const lv=c=>LOC.comp[c.id]!=null?+LOC.comp[c.id]:c.lv;
+  const W={1:30,2:30,3:20}; let tot=0,tw=0; const per={};
+  [1,2,3].forEach(s=>{const cs=SC.comp.filter(c=>c.std===s);const w=cs.reduce((a,c)=>a+c.w,0);
+    const v=cs.reduce((a,c)=>a+c.w*lv(c)/2,0)/w;per[s]=v;tot+=W[s]*v;tw+=W[s]});
+  return {tot:tot/tw,per,lv};
+}
+function buildSc(){
+  const R0=compute(), r=readiness(), o=LOC.opt, need=SC.req.l1-R0.l1;
+  const minRows=[
+    ['Có bằng tiến sĩ đủ 3 năm (Điều 9)','Bằng TS '+fmtD(new Date(SC.phd))+'; đủ 3 năm từ '+fmtD(R0.p3),R0.phdOk?'ok':'no',R0.phdOk?'Đạt':'Chưa đủ',R0.phdOk?'':'Hạn nộp phải sau '+fmtD(R0.p3)],
+    ['Giảng dạy trực tiếp: 3 năm × 180 giờ hoặc 6 năm × 90 giờ, không quy đổi','Đã nhập '+R0.nfill+'/6 năm; '+R0.n180+' năm ≥ 180 giờ; '+R0.n90+' năm ≥ 90 giờ',R0.teachOk?'ok':R0.nfill?'no':'chk',R0.teachOk?'Đạt':R0.nfill?'Chưa đạt':'Chưa có số liệu','Nhập giờ ở mục Giảng dạy; không tính lớp dự khóa Lào – Campuchia'],
+    ['Hướng dẫn: 01 TS hoặc 02 ThS (chính ×1, phụ ×0,5)',nn(R0.supW)+' suất'+(R0.supP?'; thêm '+nn(R0.supP)+' nếu có xác nhận':''),R0.supW>=2?'ok':'no',R0.supW>=2?'Đạt':'Chưa đạt',''],
+    ['Tham gia phát triển 01 chương trình hoặc 01 học phần mới đã dùng',R0.prog.map(g=>g.ok?'Đủ minh chứng':'Thiếu văn bản áp dụng').join('; '),R0.progOk?'ok':'chk',R0.progOk?'Đạt':'Thiếu minh chứng',R0.progOk?'':'Xin văn bản đưa chương trình vào áp dụng'],
+    ['12 công bố loại 1, ứng viên là tác giả chính, sau ngày cấp bằng TS',R0.l1+' (quốc tế '+R0.intlAll+', trong nước '+R0.dom+', sách thay thế '+R0.bsub+')',R0.l1>=SC.req.l1?'ok':'no',R0.l1>=SC.req.l1?'Đạt':'Thiếu '+need,''],
+    ['Trong đó tối thiểu 03 công bố quốc tế uy tín (khối III, IV)',R0.intlAll+' bài',R0.intlAll>=SC.req.intl?'ok':'no',R0.intlAll>=SC.req.intl?'Đạt':'Thiếu '+(SC.req.intl-R0.intlAll),''],
+    ['Ngoại ngữ phục vụ chuyên môn (PL I mục IV)',SC.lang.note,SC.lang.ok?'ok':'no',SC.lang.ok?'Đạt':'Chưa đạt','']];
+  const nok=minRows.filter(x=>x[2]==='ok').length;
+  let h='<h2>Tiêu chí Hương</h2><p class="lead">Bảng chấm theo '+esc(SC.basis)+' Dữ liệu gốc cập nhật '+esc(SC.updated)+'. Mọi thay đổi chị nhập ở đây được tính lại ngay. <span id="sc-saved" class="sc-save"></span></p>';
+  h+='<div class="opts"><label><input type="checkbox" data-sco="strict"'+(o.strict?' checked':'')+'> Kịch bản khắt khe: NNĐS không còn là loại 1</label>'+
+     '<label><input type="checkbox" data-sco="field"'+(o.field?' checked':'')+'> Loại các bài có rủi ro phù hợp ngành</label>'+
+     '<label>Hạn nộp hồ sơ <input type="date" data-sco="deadline" value="'+esc(deadlineDate())+'"></label></div>';
+  h+='<div class="kpis" id="sc-sum">'+
+    kpi(R0.l1>=12?'good':'bad','Công bố loại 1, tác giả chính',R0.l1,SC.req.l1,R0.l1>=12?'Đã đủ':'Còn thiếu '+need+(R0.pi+R0.pd+R0.bpend?'; đang chờ: '+(R0.pi+R0.pd)+' bài, sách thay thế '+R0.bpend:''),
+      bar([[R0.intlAll,'b1'],[R0.dom,'b2'],[R0.bsub,'b3']],SC.req.l1)+'<div class="legend"><span style="--c:var(--accent)">Quốc tế '+R0.intlAll+'</span><span style="--c:var(--orange)">Trong nước '+R0.dom+'</span><span style="--c:#9b86b8">Sách thay thế '+R0.bsub+'</span></div>')+
+    kpi(R0.intlAll>=3?'good':'bad','Quốc tế uy tín (WoS/Scopus)',R0.intlAll,SC.req.intl,R0.intlAll>=3?'Đã đủ':'Còn thiếu',bar([[R0.intlAll,'b1']],SC.req.intl))+
+    kpi(R0.supW>=2?'good':'bad','Hướng dẫn thạc sĩ (suất)',nn(R0.supW),2,R0.supP?'Thêm '+nn(R0.supP)+' nếu có xác nhận':'',bar([[R0.supW,'b1']],2))+
+    kpi(nok===minRows.length?'good':'warn','Yêu cầu tối thiểu đạt',nok,minRows.length,'Thiếu một mục là chưa đủ điều kiện',bar([[nok,'b1']],minRows.length))+
+    kpi('warn','Mức minh chứng năng lực (tham khảo)',Math.round(r.tot*100)+'%',null,'TC1 '+Math.round(r.per[1]*100)+'% · TC2 '+Math.round(r.per[2]*100)+'% · TC3 '+Math.round(r.per[3]*100)+'%. Không phải điểm chính thức')+'</div>';
+  h+='<h3 id="sc-gap">Còn thiếu gì</h3><div class="gap">'+gaps(R0).map(g=>'<div class="alert"><b>'+esc(g[0])+'</b><span>'+esc(g[1])+'</span></div>').join('')+'</div>';
+  h+='<h3 id="sc-min">Yêu cầu tối thiểu (đạt hoặc không đạt)</h3><p class="lead">PL I mục III. Điểm năng lực không bù được cho yêu cầu tối thiểu (Điều 12).</p><table class="jt sc"><thead><tr><th>Yêu cầu</th><th>Hiện có</th><th>Kết quả</th></tr></thead><tbody>'+
+    minRows.map(x=>'<tr><td data-l="Yêu cầu"><div class="nm">'+esc(x[0])+'</div></td><td data-l="Hiện có">'+esc(x[1])+(x[4]?'<div class="sm">'+esc(x[4])+'</div>':'')+'</td><td data-l="Kết quả" class="r">'+T(x[2],x[3])+'</td></tr>').join('')+'</tbody></table>';
+  h+='<h3 id="sc-pub">Công bố sau ngày cấp bằng TS ('+R0.P.length+')</h3><p class="lead">Chỉ tính bài chị là tác giả chính (tác giả thứ nhất hoặc tác giả liên hệ). Trong nước tính loại 1 khi tạp chí có mức tối đa 1,0 điểm trong danh mục HĐGS 2025 (giai đoạn chuyển tiếp, Điều 29.4). Kỷ yếu WoS/Scopus tính tối đa '+Math.floor(SC.req.intl/3)+' bài vào phần quốc tế.</p>'+
+    '<table class="jt sc"><thead><tr><th>TT</th><th>Công bố</th><th>Vai trò, ngày</th><th>Tính loại 1</th></tr></thead><tbody>'+R0.P.map(pubRow).join('')+'</tbody></table>';
+  h+='<h3 id="sc-sub">Sách chuyên khảo dùng thay công bố</h3><p class="lead">Khối III: chủ biên thay tối đa 02, đồng chủ biên thay tối đa 01 công bố loại 1. Chỉ tính khi sách đã xuất bản.</p><table class="jt sc"><tbody>'+
+    R0.B.map(b=>'<tr><td data-l="Sách"><div class="nm">'+esc(b.t)+'</div><div class="sm">'+(b.role==='chu'?'Chủ biên':'Đồng chủ biên')+' · thay '+bookSub(b)+' công bố'+(b.note?' · '+esc(b.note):'')+'</div></td><td data-l="Trạng thái" class="r"><select data-scs="b:'+esc(b.id)+'" data-f="st"'+(b.user?' data-u="books"':'')+'><option value="pend"'+(b.st!=='pub'?' selected':'')+'>Chưa xuất bản</option><option value="pub"'+(b.st==='pub'?' selected':'')+'>Đã xuất bản, có ISBN</option></select>'+(b.user?' <button class="btn" data-scdel="books:'+esc(b.id)+'">Xoá</button>':'')+'</td></tr>').join('')+'</tbody></table>';
+  const stL={qd:'Có QĐ cấp bằng',xn:'Có xác nhận đã hoàn thành điều kiện',bv:'Đã bảo vệ, chưa có xác nhận',dang:'Đang hướng dẫn'};
+  h+='<h3 id="sc-sup">Hướng dẫn sau đại học</h3><p class="lead">Chính ×1, phụ hoặc đồng hướng dẫn ×0,5. Tính khi có QĐ cấp bằng hoặc cơ sở xác nhận đã bảo vệ và hoàn thành mọi điều kiện.</p><table class="jt sc"><tbody>'+
+    R0.S.map(s=>'<tr><td data-l="Học viên"><div class="nm">'+esc(s.who)+'</div><div class="sm">'+(s.role==='chinh'?'Hướng dẫn chính':'Hướng dẫn phụ')+(s.note?' · '+esc(s.note):'')+'</div></td><td data-l="Trạng thái" class="r"><select data-scs="s:'+esc(s.id)+'" data-f="st"'+(s.user?' data-u="sup"':'')+'>'+Object.entries(stL).map(([k,l])=>'<option value="'+k+'"'+(s.st===k?' selected':'')+'>'+l+'</option>').join('')+'</select>'+(s.user?' <button class="btn" data-scdel="sup:'+esc(s.id)+'">Xoá</button>':'')+'</td></tr>').join('')+'</tbody></table>';
+  h+='<h3 id="sc-teach">Giờ trực tiếp giảng dạy</h3><p class="lead">Chỉ tính giờ thực tế dạy lý thuyết, thực hành từ trình độ đại học, có phân công và xác nhận; không quy đổi, không tính hướng dẫn luận văn. Điền số giờ khi có xác nhận của Học viện Quân y.</p><table class="jt sc"><tbody>'+
+    R0.th.map(t=>'<tr><td data-l="Năm học"><div class="nm">'+esc(t.y)+'</div></td><td data-l="Số giờ" class="r"><input type="number" min="0" step="1" inputmode="numeric" data-sct="'+esc(t.y)+'" value="'+(t.h==null?'':t.h)+'" placeholder="giờ"> '+(t.h==null?T('chk','Chưa nhập'):t.h>=180?T('ok','≥ 180'):t.h>=90?T('chk','≥ 90'):T('no','< 90'))+'</td></tr>').join('')+'</tbody></table>';
+  h+='<h3 id="sc-prog">Chương trình đào tạo, học phần</h3><table class="jt sc"><tbody>'+R0.prog.map(g=>'<tr><td data-l="Nội dung"><div class="nm">'+esc(g.t)+'</div><div class="sm">'+esc(g.note)+'</div></td><td data-l="Minh chứng" class="r"><label><input type="checkbox" data-scg="'+esc(g.id)+'"'+(g.ok?' checked':'')+'> Đã có văn bản áp dụng</label></td></tr>').join('')+'</tbody></table>';
+  const lvL=['Thiếu','Một phần','Đủ'], lvK=['no','chk','ok'];
+  h+='<h3 id="sc-comp">Đánh giá năng lực theo tiêu chuẩn</h3><p class="lead">Trọng số tối thiểu: TC1 ≥ 30%, TC2 ≥ 30%, TC3 ≥ 20%. Cơ sở đào tạo công bố thang điểm cụ thể trước khi nhận hồ sơ, nên ở đây chỉ theo dõi mức minh chứng.</p><table class="jt sc"><thead><tr><th>TT</th><th>Tiêu chí</th><th>Đã có / cần bổ sung</th><th>Mức</th></tr></thead><tbody>'+
+    SC.comp.map(c=>{const v=r.lv(c);return '<tr><td class="c">'+c.id+'</td><td data-l="Tiêu chí"><div class="nm">'+esc(c.name)+'</div><div class="sm">Tỷ trọng ≥ '+c.w+'%</div></td><td data-l="Minh chứng"><div>'+esc(c.have)+'</div><div class="sm">Cần: '+esc(c.need)+'</div></td><td data-l="Mức" class="r"><select data-scc="'+c.id+'">'+lvL.map((l,i)=>'<option value="'+i+'"'+(v===i?' selected':'')+'>'+l+'</option>').join('')+'</select> '+T(lvK[v],lvL[v])+'</td></tr>'}).join('')+'</tbody></table>';
+  h+='<h3 id="sc-gen">Điều kiện chung</h3><table class="jt sc"><tbody>'+SC.general.map(g=>{const v=LOC.gen[g.id]!=null?LOC.gen[g.id]:'';return '<tr><td data-l="Điều kiện"><div class="nm">'+esc(g.t)+'</div><div class="sm">'+esc(g.note)+'</div></td><td data-l="Trạng thái" class="r"><select data-scx="'+g.id+'"><option value=""'+(v===''?' selected':'')+'>Chưa kiểm</option><option value="1"'+(v==='1'?' selected':'')+'>Đã kiểm, đạt</option><option value="0"'+(v==='0'?' selected':'')+'>Có vấn đề</option></select></td></tr>'}).join('')+'</tbody></table>';
+  h+='<h3 id="sc-add">Thêm công trình hoặc tiêu chuẩn mới</h3>'+
+    '<form class="scf" data-scf="pub"><b class="wide">Bài báo, báo cáo</b><label class="wide">Tên bài<input name="t" required></label><label>Tạp chí hoặc kỷ yếu<input name="j" required placeholder="vd. Ngôn ngữ, JLTR"></label>'+
+    '<label>Loại<select name="kind"><option value="intl">Tạp chí quốc tế WoS/Scopus</option><option value="dom1">Trong nước, HĐGS 2025 tối đa 1,0 điểm</option><option value="dom0">Trong nước, dưới 1,0 hoặc ngoài danh mục</option><option value="procS">Kỷ yếu thuộc WoS/Scopus</option><option value="proc">Kỷ yếu khác</option></select></label>'+
+    '<label>Vai trò<select name="role">'+ROLE_MAIN.map(x=>'<option>'+x+'</option>').join('')+'<option>Đồng tác giả</option></select></label>'+
+    '<label>Trạng thái<select name="st"><option value="pub">Đã đăng</option><option value="pend">Đang chờ đăng</option></select></label><label>Tháng, năm<input name="date" placeholder="vd. 12/2026"></label>'+
+    '<label>Hạng (nếu quốc tế)<select name="q"><option value="">Không rõ</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select></label>'+
+    '<div class="row"><label style="flex-direction:row;gap:6px"><input type="checkbox" name="risk"> Nội dung thiên về giáo dục học (rủi ro phù hợp ngành)</label><button class="btn pri">Thêm bài</button></div></form>'+
+    '<form class="scf" data-scf="books"><b class="wide">Sách chuyên khảo</b><label class="wide">Tên sách<input name="t" required></label><label>Vai trò<select name="role"><option value="chu">Chủ biên</option><option value="dong">Đồng chủ biên</option></select></label><label>Trạng thái<select name="st"><option value="pub">Đã xuất bản, có ISBN</option><option value="pend">Chưa xuất bản</option></select></label><div class="row"><button class="btn pri">Thêm sách</button></div></form>'+
+    '<form class="scf" data-scf="sup"><b class="wide">Học viên hướng dẫn</b><label>Họ tên<input name="who" required></label><label>Vai trò<select name="role"><option value="chinh">Hướng dẫn chính</option><option value="phu">Hướng dẫn phụ</option></select></label><label>Trạng thái<select name="st">'+Object.entries(stL).map(([k,l])=>'<option value="'+k+'">'+l+'</option>').join('')+'</select></label><label>Ghi chú<input name="note" placeholder="Cơ sở đào tạo, số QĐ"></label><div class="row"><button class="btn pri">Thêm học viên</button></div></form>';
+  h+='<h3 id="sc-data">Lưu và đồng bộ</h3><p class="lead">Thay đổi được mã hoá và lưu trên trình duyệt đang dùng. Muốn máy khác cũng thấy, bấm Xuất dữ liệu rồi gửi tệp cho Claude để cập nhật bản gốc, hoặc dùng Nhập dữ liệu trên máy kia.</p><div class="acts"><button class="btn" data-scx2="export">Xuất dữ liệu (.json)</button><button class="btn" data-scx2="import">Nhập dữ liệu</button><button class="btn" data-scx2="reset">Xoá thay đổi trên máy này</button><input type="file" id="sc-file" accept="application/json,.json" hidden></div>';
+  $('#sc-body').innerHTML=h;
+  $('#tab-sc').innerHTML=[['sc-sum','Tổng quan'],['sc-gap','Còn thiếu gì'],['sc-min','Yêu cầu tối thiểu'],['sc-pub','Công bố'],['sc-sub','Sách thay thế'],['sc-sup','Hướng dẫn'],['sc-teach','Giờ giảng'],['sc-prog','Chương trình'],['sc-comp','Năng lực TC1–TC3'],['sc-gen','Điều kiện chung'],['sc-add','Thêm công trình'],['sc-data','Lưu và đồng bộ']]
+    .map(([id,l],i)=>'<a data-rgo="'+id+'">'+(i<3?'<b>'+l+'</b>':l)+'</a>').join('');
+}
+function pubRow(p){
+  const j=p.jd, k=p.st!=='pub'?'pend':j.t;
+  let acts='';
+  if(p.st!=='pub') acts+='<button class="btn" data-scp="'+esc(p.n)+'" data-f="st" data-v="pub">Đã đăng</button>';
+  else if(p.user||String(p.n).startsWith('C')) acts+='<button class="btn" data-scp="'+esc(p.n)+'" data-f="st" data-v="pend">Đưa về đang chờ</button>';
+  if(p.main==='cond') acts+='<button class="btn" data-scp="'+esc(p.n)+'" data-f="main" data-v="1">Đã có bản in</button>';
+  if(p.role==='Cần xác nhận') acts+='<button class="btn" data-scp="'+esc(p.n)+'" data-f="main" data-v="1">Là tác giả chính</button>';
+  if(p.user) acts+='<button class="btn" data-scdel="pubs:'+esc(p.n)+'">Xoá</button>';
+  const kindL=p.kind==='intl'?'Quốc tế'+(p.q?' '+p.q:''):p.kind==='dom'?'Trong nước':'Kỷ yếu'+(p.scopus?' Scopus':'');
+  return '<tr><td class="c">['+esc(p.n)+']</td><td data-l="Công bố"><div class="nm">'+esc(p.t)+'</div><div class="sm">'+esc(p.j)+' · '+kindL+(p.nnds?' · NNĐS':'')+'</div>'+(p.note?'<div class="sm">'+esc(p.note)+'</div>':'')+'</td>'+
+    '<td data-l="Vai trò, ngày">'+esc(p.role)+'<div class="sm">'+esc(p.date||'')+'</div></td>'+
+    '<td data-l="Tính loại 1" class="r">'+T(k,p.st!=='pub'?(p.jdp&&p.jdp.c?'Chờ đăng, sẽ tính':'Chờ đăng, không tính'):j.c?'Tính':'Không tính')+'<div class="sm">'+esc(p.st!=='pub'&&p.jdp&&!p.jdp.c?p.jdp.why:j.why)+'</div>'+(acts?'<div class="acts">'+acts+'</div>':'')+'</td></tr>';
+}
+function gaps(R0){
+  const g=[], need=SC.req.l1-R0.l1;
+  if(need>0){
+    let w='Đang chờ đăng có '+(R0.pi+R0.pd)+' bài sẽ được tính khi ra số. ';
+    if(R0.bpend) w+='Xuất bản sách chuyên khảo đang chờ thay thêm được tối đa '+R0.bpend+' công bố. ';
+    const tot=R0.l1+R0.pi+R0.pd+R0.bpend;
+    w+=tot>=SC.req.l1?'Nếu tất cả về đích thì đạt '+tot+'/12.':'Kể cả khi tất cả về đích vẫn chỉ đạt '+tot+'/12; cần viết thêm '+(SC.req.l1-tot)+' bài là tác giả chính.';
+    g.push(['Thiếu '+need+' công bố loại 1 là tác giả chính',w]);
+  }
+  if(R0.intlAll<SC.req.intl) g.push(['Thiếu '+(SC.req.intl-R0.intlAll)+' công bố quốc tế uy tín','Ưu tiên các bài WoS/Scopus là tác giả thứ nhất hoặc liên hệ.']);
+  if(!R0.teachOk) g.push([R0.nfill?'Giờ giảng chưa đạt':'Chưa có số liệu giờ giảng','Cần 3 năm mỗi năm 180 giờ hoặc 6 năm mỗi năm 90 giờ trực tiếp. Xin xác nhận của Học viện Quân y, điền bảng B.2 Mẫu 01.']);
+  if(R0.supW<2) g.push(['Chưa đủ 2 suất hướng dẫn thạc sĩ','Hiện có '+nn(R0.supW)+' suất.']);
+  if(!R0.progOk) g.push(['Thiếu minh chứng phát triển chương trình','Xin văn bản đưa chương trình (QĐ 3222/2020) vào áp dụng, hoặc xác nhận học phần mới đã dùng cho đào tạo đại học.']);
+  if(!R0.phdOk) g.push(['Chưa đủ 3 năm từ ngày cấp bằng TS','Đủ từ '+fmtD(R0.p3)+'.']);
+  const cond=R0.P.filter(p=>p.main==='cond'); if(cond.length) g.push(['Chờ bản in xác nhận tác giả liên hệ: '+cond.map(p=>'['+p.n+']').join(', '),'Có bản in thì bấm “Đã có bản in” để tính thêm.']);
+  const nn2=R0.P.filter(p=>p.jd.c&&p.nnds).length;
+  if(nn2&&!LOC.opt.strict) g.push(['Rủi ro: '+nn2+' bài NNĐS đang được tính','NNĐS không có trong danh mục Bộ KH&CN 2026. Nếu kết quả xếp loại ra trước hạn nộp mà NNĐS không đạt loại 1 thì các bài này mất. Bật “Kịch bản khắt khe” để xem.']);
+  const fr=R0.P.filter(p=>p.jd.c&&p.risk==='field').length;
+  if(fr&&!LOC.opt.field) g.push(['Rủi ro phù hợp ngành: '+fr+' bài đang tính','Nội dung thiên về giáo dục học; hội đồng xét theo nội dung (Điều 11.2).']);
+  const r=readiness(); SC.comp.filter(c=>r.lv(c)===0).forEach(c=>g.push(['Năng lực '+c.id+' chưa có minh chứng: '+c.name,c.need]));
+  if(!g.length) g.push(['Đã đủ yêu cầu tối thiểu','Tiếp tục hoàn thiện minh chứng năng lực.']);
+  return g;
+}
+function scChanged(){const y=$('#reg').scrollTop;buildSc();$('#reg').scrollTop=y;saveLoc()}
+function scEvents(){
+  const box=$('#sc-body');
+  box.addEventListener('change',e=>{
+    const t=e.target, d=t.dataset;
+    if(d.sco){if(d.sco==='deadline')LOC.deadline=t.value||null;else LOC.opt[d.sco]=t.checked}
+    else if(d.scs){const [ty,id]=d.scs.split(/:(.*)/);if(d.u){const it=LOC.add[d.u].find(x=>x.id===id);if(it)it[d.f]=t.value}else{LOC.ov[d.scs]=Object.assign(LOC.ov[d.scs]||{},{[d.f]:t.value})}}
+    else if(d.sct){LOC.teach[d.sct]=t.value===''?null:Math.max(0,+t.value)}
+    else if(d.scg){LOC.prog[d.scg]=t.checked}
+    else if(d.scc){LOC.comp[d.scc]=+t.value}
+    else if(d.scx){LOC.gen[d.scx]=t.value}
+    else if(t.id==='sc-file'){importLoc(t.files[0]);return}
+    else return;
+    scChanged();
+  });
+  box.addEventListener('click',e=>{
+    const t=e.target.closest('[data-scp],[data-scdel],[data-scx2]'); if(!t) return;
+    const d=t.dataset;
+    if(d.scp){const n=d.scp, u=LOC.add.pubs.find(x=>String(x.n)===n), v=d.f==='main'?true:d.v;
+      if(u) u[d.f]=v; else LOC.ov['p:'+n]=Object.assign(LOC.ov['p:'+n]||{},{[d.f]:v});
+      if(d.f==='main'&&!u&&(LOC.ov['p:'+n].role==null)){const b=SC.pubs.find(x=>x.n===n);if(b&&b.role==='Cần xác nhận')LOC.ov['p:'+n].role='Tác giả chính'}
+      scChanged()}
+    else if(d.scdel){const [ty,id]=d.scdel.split(/:(.*)/);if(!confirm('Xoá mục này khỏi bảng chấm trên máy này?'))return;LOC.add[ty]=LOC.add[ty].filter(x=>String(x.n||x.id)!==id);scChanged()}
+    else if(d.scx2==='export'){const b=new Blob([JSON.stringify({kind:'tieu-chi-huong',base:SC.updated,loc:LOC},null,1)],{type:'application/json'});const l=document.createElement('a');l.href=URL.createObjectURL(b);l.download='tieu-chi-huong-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(l);l.click();l.remove()}
+    else if(d.scx2==='import'){$('#sc-file').click()}
+    else if(d.scx2==='reset'){if(!confirm('Xoá mọi thay đổi đã nhập trên máy này và quay về dữ liệu gốc?'))return;LOC=blankLoc();try{localStorage.removeItem(LKEY)}catch(e){}buildSc()}
+  });
+  box.addEventListener('submit',e=>{
+    const f=e.target.closest('[data-scf]'); if(!f) return; e.preventDefault();
+    const v=Object.fromEntries(new FormData(f).entries()), ty=f.dataset.scf, id='U'+Date.now().toString(36);
+    if(ty==='pub'){
+      const kind=v.kind==='intl'?'intl':v.kind.startsWith('dom')?'dom':'proc';
+      LOC.add.pubs.push({n:id,t:v.t.trim(),j:v.j.trim(),kind,scopus:v.kind==='procS',l1j:v.kind==='dom1',nnds:kind==='dom'&&isNNDS(v.j),role:v.role,main:ROLE_MAIN.includes(v.role),st:v.st,date:v.date.trim(),q:v.q,risk:v.risk?'field':'',note:'Thêm trên trang ngày '+new Date().toLocaleDateString('vi-VN')});
+    }else if(ty==='books'){LOC.add.books.push({id,t:v.t.trim(),role:v.role,st:v.st,note:'Thêm trên trang'})}
+    else if(ty==='sup'){LOC.add.sup.push({id,who:v.who.trim(),role:v.role,st:v.st,note:v.note.trim()})}
+    scChanged();toast('Đã thêm và tính lại bảng chấm.',3000);
+  });
+}
+async function importLoc(file){
+  if(!file) return;
+  try{const o=JSON.parse(await file.text());if(o.kind!=='tieu-chi-huong'||!o.loc) throw 0;
+    LOC=Object.assign(blankLoc(),o.loc);LOC.add=Object.assign({pubs:[],books:[],sup:[]},o.loc.add||{});LOC.opt=Object.assign({strict:false,field:false},o.loc.opt||{});
+    buildSc();saveLoc();toast('Đã nhập dữ liệu.',3000)}
+  catch(e){toast('Tệp không đúng định dạng dữ liệu Tiêu chí Hương.',5000)}
+}
+function showView(which){
+  $('#reg-body').hidden=which!=='reg';$('#sc-body').hidden=which!=='sc';
+  if(SCV!==(which==='sc')){SCV=which==='sc';$('#reg').scrollTop=0}
+}
+async function showSc(){
+  setReg(true);showView('sc');
+  if(SC) return;
+  $('#sc-body').innerHTML='<p class="lead">Đang giải mã dữ liệu…</p>';$('#tab-sc').innerHTML='';
+  try{SC=JSON.parse(dec.decode(await getBin('c.bin')));await loadLoc();buildSc();scEvents()}
+  catch(e){SC=null;$('#sc-body').innerHTML='<p class="lead">Không tải được dữ liệu. Kiểm tra mạng rồi bấm lại tab Tiêu chí Hương.</p>'}
 }
 
 /* ---------- Ngữ cảnh ---------- */
@@ -573,8 +840,9 @@ function boot(){
     const t=ev.target.closest('[data-p],[data-goto],[data-orig],[data-dl],[data-tog],[data-retry],[data-tab],[data-rf],[data-rfil],[data-rgo]'); if(!t) return;
     if(t.dataset.tab){
       document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b===t));
-      ['toc','arts','find','reg'].forEach(n=>$('#tab-'+n).hidden=n!==t.dataset.tab);
+      ['toc','arts','find','reg','sc'].forEach(n=>$('#tab-'+n).hidden=n!==t.dataset.tab);
       if(t.dataset.tab==='reg'){showReg();$('#app').classList.remove('open')}
+      else if(t.dataset.tab==='sc'){showSc();$('#app').classList.remove('open')}
       else if(REGMODE) setReg(false);
       if(t.dataset.tab==='find') $('#q').focus();
       if(t.dataset.tab==='arts'){const c=$('.card.on'); if(c) c.scrollIntoView({block:'nearest'})}
