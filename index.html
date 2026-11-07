@@ -50,7 +50,7 @@ a{color:var(--accent)}
 
 #side{grid-area:side;display:flex;flex-direction:column;min-height:0;background:var(--panel);border-right:1px solid var(--line)}
 #tabs{display:flex;border-bottom:1px solid var(--line)}
-#tabs button{flex:1;padding:11px 4px;border:0;border-bottom:3px solid transparent;background:none;cursor:pointer;color:var(--muted);font-weight:600}
+#tabs button{flex:1;padding:11px 3px;font-size:14px;line-height:1.25;border:0;border-bottom:3px solid transparent;background:none;cursor:pointer;color:var(--muted);font-weight:600}
 #tabs button[aria-selected=true]{color:var(--accent);border-bottom-color:var(--orange)}
 .panel{flex:1;min-height:0;overflow:auto;padding:8px 16px 24px 8px}
 
@@ -105,6 +105,65 @@ mark{background:var(--mark);color:inherit;border-radius:2px}
 .pg .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#7b858c;font-size:14px;background:#fff}
 .pg .ph button{border:1px solid #bbb;background:#f5f5f5;color:#333;border-radius:6px;padding:6px 10px;cursor:pointer}
 #scrim{display:none}
+
+/* Quy định PGS */
+#app.reg #view,#app.reg #ctx{display:none}
+#reg{grid-area:view;overflow:auto;min-width:0;min-height:0;background:var(--bg);padding:20px 24px 48px}
+#reg .wrap{max-width:1080px;margin:0 auto}
+#reg h2{font-size:22px;margin:0 0 4px;color:var(--accent)}
+#reg h3{font-size:17px;margin:30px 0 4px;color:var(--accent);scroll-margin-top:12px}
+#reg h4{font-size:14.5px;margin:18px 0 8px;scroll-margin-top:12px}
+#reg .lead{color:var(--muted);margin:0 0 14px;font-size:14px}
+#reg .lead a{font-weight:600}
+.alerts{display:grid;gap:8px;margin-top:10px}
+.alert{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:8px;padding:10px 12px}
+.alert b{display:block;font-size:14px}
+.alert span{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+.doc{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;flex-direction:column;scroll-margin-top:12px}
+.doc .tt{font-weight:600;font-size:14px}
+.doc .mt{color:var(--muted);font-size:13px;margin-top:3px}
+.doc .acts{margin-top:auto;padding-top:8px}
+.rfilter{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.rfilter input{flex:1 1 240px;min-width:0;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.rfilter button{min-height:34px;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--panel);cursor:pointer;font-size:13px}
+.rfilter button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+#rcount{color:var(--muted);font-size:13px;margin:0 0 6px}
+table.jt{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:13.5px}
+.jt th{background:var(--soft);color:var(--accent);text-align:left;font-size:12.5px;padding:8px;border-bottom:1px solid var(--line)}
+.jt td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.jt tr:last-child td{border-bottom:0}
+.jt .no{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.jt .nm{font-weight:600}
+.jt .sm{color:var(--muted);font-size:12.5px;margin-top:2px}
+.jt .hd{font-size:13px}
+.jt .hd+.hd{margin-top:5px}
+.jt .pt{white-space:nowrap;font-weight:600}
+.jt .acts{margin:0;flex-direction:column;align-items:flex-start}
+.jt .acts .btn,.jt .acts .chip{min-height:30px;font-size:12.5px;white-space:nowrap}
+.jt td:last-child{width:196px}
+.jt td.no{width:64px}
+.jt td:nth-child(3){width:30%}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:999px;margin:3px 4px 0 0;white-space:nowrap}
+.tag.ok{background:#e1f5ea;color:#0b6b3a}
+.tag.chk{background:#ffe6cb;color:#8a4207}
+.tag.no{background:#fde2e1;color:#9b1c1c}
+.tag.me{background:var(--soft);color:var(--accent);border:1px solid var(--line)}
+@media (prefers-color-scheme:dark){.tag.ok{background:#12301f;color:#63d6a0}.tag.chk{background:#3a2716;color:#f0a868}.tag.no{background:#3a1717;color:#f3a3a3}}
+.rnav a{display:block;padding:7px 8px;border-radius:6px;cursor:pointer;text-decoration:none;color:inherit}
+.rnav a:hover{background:var(--soft)}
+.rnav a.sub{padding-left:22px;font-size:13.5px;color:var(--muted)}
+.rnav .open{margin:4px 0 10px}
+@media (max-width:820px){
+  #reg{padding:14px 12px 40px}
+  .jt thead{display:none}
+  .jt,.jt tbody,.jt tr,.jt td{display:block;width:100%}
+  .jt tr{border-bottom:1px solid var(--line);padding:8px 2px}
+  .jt td,.jt td:last-child,.jt td.no,.jt td:nth-child(3){border:0;padding:3px 8px;width:100%}
+  .jt .acts{flex-direction:row}
+  .jt td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+  .jt .no::before{content:"STT danh mục 2026: "}
+}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:calc(100% - 32px);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;z-index:40}
 #toast a{color:inherit;font-weight:600}
 
@@ -156,7 +215,9 @@ mark{background:var(--mark);color:inherit;border-radius:2px}
       <button role="tab" data-tab="toc" aria-selected="true">Mục lục</button>
       <button role="tab" data-tab="arts" aria-selected="false">Bài báo</button>
       <button role="tab" data-tab="find" aria-selected="false">Tìm kiếm</button>
+      <button role="tab" data-tab="reg" aria-selected="false">Quy định PGS</button>
     </div>
+    <div class="panel rnav" id="tab-reg" hidden></div>
     <div class="panel" id="tab-toc"></div>
     <div class="panel" id="tab-arts" hidden></div>
     <div class="panel" id="tab-find" hidden>
@@ -167,6 +228,7 @@ mark{background:var(--mark);color:inherit;border-radius:2px}
   </aside>
   <div id="ctx"></div>
   <main id="view"><div id="pages"></div></main>
+  <section id="reg" hidden><div class="wrap" id="reg-body"></div></section>
 </div>
 <div id="toast" hidden role="status"></div>
 
@@ -249,6 +311,7 @@ function layoutWidth(){
   document.documentElement.style.setProperty('--pw',Math.round(base*SCALE)+'px');
 }
 function jump(p,noHash){
+  if(REGMODE){setReg(false,true);layoutWidth()}
   p=Math.max(1,Math.min(M.n,p|0||1));
   const el=document.getElementById('p'+p); if(!el) return;
   el.scrollIntoView({block:'start'});
@@ -335,6 +398,110 @@ async function openOrig(n,btn,download){
   }finally{btn.disabled=false;btn.textContent=old}
 }
 
+/* ---------- Quy định PGS ---------- */
+let R=null, REGMODE=false, RF='all';
+const blobCache=new Map();
+async function blobUrl(f,mime){
+  if(blobCache.has(f)) return blobCache.get(f);
+  const url=URL.createObjectURL(new Blob([await getBin(f)],{type:mime}));
+  blobCache.set(f,url); return url;
+}
+async function openFile(f,mime,page,dlname,btn){
+  const w=dlname?null:window.open('','_blank');
+  if(w){try{w.document.title='Đang mở văn bản';w.document.body.innerHTML='<p style="font:16px sans-serif;padding:24px">Đang giải mã văn bản…</p>'}catch(e){}}
+  const old=btn.textContent;btn.disabled=true;btn.textContent='Đang giải mã…';
+  try{
+    const url=await blobUrl(f,mime), target=url+(page?'#page='+page:'');
+    if(dlname){const l=document.createElement('a');l.href=url;l.download=dlname;document.body.appendChild(l);l.click();l.remove()}
+    else if(w) w.location.href=target;
+    else toast('Trình duyệt đã chặn tab mới. <a href="'+target+'" target="_blank" rel="noopener">Bấm vào đây để mở văn bản</a>',12000);
+  }catch(e){if(w) w.close();toast('Không tải được văn bản. Kiểm tra mạng rồi thử lại.',6000)}
+  finally{btn.disabled=false;btn.textContent=old}
+}
+function setReg(on,quiet){
+  if(REGMODE===on) return;
+  REGMODE=on;$('#app').classList.toggle('reg',on);$('#reg').hidden=!on;
+  if(!on&&!quiet){const c=CUR;requestAnimationFrame(()=>{layoutWidth();jump(c,true)})}
+}
+const PDF='application/pdf';
+function docActs(d){
+  let h='<button class="btn pri" data-rf="'+d.f+'" data-mime="'+PDF+'">Xem, '+d.pages+' tr.</button>'+
+    '<button class="btn" data-rf="'+d.f+'" data-mime="'+PDF+'" data-dlname="'+esc(d.dlname)+'">Tải PDF</button>';
+  if(d.orig) h+='<button class="btn" data-rf="'+d.orig.f+'" data-mime="'+d.orig.mime+'" data-dlname="'+esc(d.orig.name)+'">Tải bản gốc .'+d.orig.ext+'</button>';
+  if(d.src) h+='<a class="btn" href="'+esc(d.src)+'" target="_blank" rel="noopener noreferrer">Google Drive ↗</a>';
+  return h;
+}
+function linkActs(l){
+  if(!l||!l.url) return '<span class="chip">Chưa tìm thấy website</span>';
+  let h='<a class="btn" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">'+(l.source==='VJOL'?'Trang trên VJOL':'Website')+' ↗</a>';
+  (l.extra||[]).forEach(x=>{h+='<a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.label)+' ↗</a>'});
+  return h;
+}
+function mineTags(ns,detail){
+  return ns.map(n=>'<span class="tag me" title="'+esc((M.arts.find(a=>a.n===n)||{}).title||'')+'">['+n+']'+(detail&&detail[n]?' '+esc(detail[n]):'')+'</span>').join('');
+}
+function listBtn(page){
+  const d=R.docs.find(x=>x.id===R.list_doc);
+  return '<button class="btn" data-rf="'+d.f+'" data-mime="'+PDF+'" data-page="'+page+'">Xem trong danh mục, tr. '+page+'</button>';
+}
+function jRow(j){
+  const st=j.status==='khop'?'<span class="tag ok">Khớp tên</span>':j.status==='gop'?'<span class="tag ok">Đã hợp nhất, có xác nhận</span>':'<span class="tag chk">Đổi tên hoặc gộp, cần kiểm</span>';
+  const hd=j.hdgs.map(h=>'<div class="hd">'+esc(h.name)+' <span class="sm">· ISSN '+esc(h.issn)+'</span><div class="pt">'+esc(h.pt)+' điểm</div></div>').join('');
+  const blob=nfs([j.n,j.name,j.pub,j.subs.join(' '),j.hdgs.map(h=>h.name+' '+h.issn+' '+h.pub).join(' ')].join(' '));
+  return '<tr data-st="'+j.status+'" data-mine="'+(j.mine.length?1:0)+'" data-link="'+(j.link&&j.link.url?1:0)+'" data-q="'+esc(blob)+'">'+
+    '<td class="no">'+j.n+(j.sec==='intl'?'<div class="sm">Scopus/WoS</div>':'')+'</td>'+
+    '<td data-l="Danh mục 2026 (Bộ KH&CN)"><div class="nm">'+esc(j.name)+'</div>'+
+      (j.subs.length?'<div class="sm">Kỳ: '+j.subs.map(esc).join('; ')+'</div>':'')+
+      '<div class="sm">'+esc(j.pub)+'</div>'+st+(j.mine.length?mineTags(j.mine,j.mine_d):'')+
+      (j.notes.length?'<div class="sm">'+j.notes.map(esc).join(' ')+'</div>':'')+'</td>'+
+    '<td data-l="Danh mục HĐGS ngành Ngôn ngữ học 2025">'+hd+'</td>'+
+    '<td data-l="Link"><div class="acts">'+linkActs(j.link)+listBtn(j.page)+'</div>'+
+      (j.link&&j.link.verified==='search-only'?'<div class="sm">Website chặn kiểm tra tự động; link lấy từ kết quả tìm kiếm.</div>':'')+'</td></tr>';
+}
+function nfs(s){return nf(String(s).normalize('NFC')).replace(/\s+/g,' ').trim()}
+function filterJ(){
+  const q=nfs($('#rq').value), rows=document.querySelectorAll('#jt-body tr'); let k=0;
+  rows.forEach(r=>{
+    const ok=(RF==='all'||(RF==='mine'?r.dataset.mine==='1':RF==='link'?r.dataset.link==='1':r.dataset.st===RF))&&(!q||(' '+r.dataset.q+' ').includes(' '+q));
+    r.hidden=!ok; if(ok) k++;
+  });
+  $('#rcount').textContent='Hiện '+k+'/'+rows.length+' tạp chí.';
+}
+function buildReg(){
+  const J=R.journals, nk=J.filter(j=>j.status==='khop').length, ng=J.filter(j=>j.status==='gop').length, nc=J.length-nk-ng, nm=J.filter(j=>j.mine.length).length, nl=J.filter(j=>j.link&&j.link.url).length;
+  let h='<h2>Quy định xét PGS</h2><p class="lead">Văn bản lấy từ <a href="'+esc(R.folder)+'" target="_blank" rel="noopener noreferrer">thư mục Google Drive ↗</a> và danh mục tạp chí trong hồ sơ. Tệp xem và tệp gốc đều được mã hoá như bài báo.</p>';
+  h+='<h3 id="r-alert">Lưu ý cho hồ sơ</h3><div class="alerts">'+R.alerts.map(a=>'<div class="alert"><b>'+esc(a.t)+'</b><span>'+esc(a.d)+'</span></div>').join('')+'</div>';
+  h+='<h3 id="r-docs">Văn bản</h3>';
+  let open=false;
+  R.docs.forEach(d=>{
+    if(d.group){if(open)h+='</div>';h+='<h4 id="rg-'+d.id+'">'+esc(d.group)+'</h4><div class="docs">';open=true}
+    h+='<div class="doc" id="rd-'+d.id+'"><div class="tt">'+esc(d.title)+'</div>'+(d.desc?'<div class="mt">'+esc(d.desc)+'</div>':'')+'<div class="acts">'+docActs(d)+'</div></div>';
+  });
+  if(open)h+='</div>';
+  h+='<h3 id="r-tc">Tạp chí xét ngành Ngôn ngữ học</h3><p class="lead">Lọc từ danh mục 2026 của Bộ KH&CN (341 tạp chí) bằng cách đối chiếu với '+R.hdgs_total+' tạp chí trong nước của danh mục HĐGS ngành Ngôn ngữ học 2025. Danh mục 2026 không có cột ngành. '+
+     J.length+' tạp chí khớp: '+nk+' khớp tên, '+ng+' đã hợp nhất (có xác nhận trên trang của tạp chí), '+nc+' đổi tên hoặc gộp nhưng chưa xác nhận được nên cần kiểm. Điểm là khung điểm HĐGS ngành 2025. Link website đã được mở thử.</p>';
+  h+='<div class="rfilter"><input id="rq" type="search" placeholder="Lọc theo tên, cơ quan, ISSN, có hoặc không dấu" aria-label="Lọc tạp chí">'+
+    [['all','Tất cả',J.length],['khop','Khớp tên',nk],['gop','Đã hợp nhất',ng],['nghi','Cần kiểm',nc],['mine','Có bài của cô',nm],['link','Có link',nl]].map(([k,l,c])=>'<button data-rfil="'+k+'" aria-pressed="'+(k===RF)+'">'+l+' ('+c+')</button>').join('')+'</div><div id="rcount"></div>';
+  h+='<table class="jt"><thead><tr><th>STT 2026</th><th>Danh mục 2026 (Bộ KH&CN)</th><th>Danh mục HĐGS ngành NNH 2025</th><th>Link</th></tr></thead><tbody id="jt-body">'+J.map(jRow).join('')+'</tbody></table>';
+  h+='<h4 id="r-miss">Có trong danh mục HĐGS ngành 2025, không có trong danh mục 2026 ('+R.missing.length+')</h4><table class="jt"><tbody>'+R.missing.map(m=>
+    '<tr><td class="no">HĐGS '+m.n+'</td><td data-l="Tạp chí"><div class="nm">'+esc(m.name)+'</div><div class="sm">ISSN '+esc(m.issn)+' · '+esc(m.pub)+'</div><span class="tag no">Không có trong danh mục 2026</span>'+mineTags(m.mine)+(m.note?'<div class="sm">'+esc(m.note)+'</div>':'')+'</td><td data-l="Điểm HĐGS 2025"><div class="pt">'+esc(m.pt)+' điểm</div></td></tr>').join('')+'</tbody></table>';
+  h+='<h4 id="r-extra">Có bài trong hồ sơ, không có trong danh mục HĐGS ngành 2025</h4><table class="jt"><tbody>'+R.extra.map(e=>
+    '<tr><td class="no">'+e.n+'</td><td data-l="Tạp chí"><div class="nm">'+esc(e.name)+'</div>'+(e.subs.length?'<div class="sm">Kỳ: '+e.subs.map(esc).join('; ')+'</div>':'')+'<div class="sm">'+esc(e.pub)+'</div>'+mineTags(e.mine)+'<div class="sm">'+esc(e.note)+'</div></td><td data-l="Link"><div class="acts">'+linkActs(e.link)+listBtn(e.page)+'</div></td></tr>').join('')+'</tbody></table>';
+  $('#reg-body').innerHTML=h;
+  let n='<div class="open"><a data-rgo="r-alert"><b>Lưu ý cho hồ sơ</b></a></div><a data-rgo="r-docs"><b>Văn bản</b></a>';
+  R.docs.forEach(d=>{n+='<a class="sub" data-rgo="rd-'+d.id+'">'+esc(d.title)+'</a>'});
+  n+='<a data-rgo="r-tc"><b>Tạp chí xét ngành Ngôn ngữ học ('+J.length+')</b></a><a class="sub" data-rgo="r-miss">Không có trong danh mục 2026 ('+R.missing.length+')</a><a class="sub" data-rgo="r-extra">Ngoài danh mục HĐGS ngành</a>';
+  $('#tab-reg').innerHTML=n;
+  $('#rq').addEventListener('input',filterJ);filterJ();
+}
+async function showReg(){
+  setReg(true);
+  if(R) return;
+  $('#reg-body').innerHTML='<p class="lead">Đang giải mã dữ liệu…</p>';$('#tab-reg').innerHTML='';
+  try{R=JSON.parse(dec.decode(await getBin('r.bin')));buildReg()}
+  catch(e){$('#reg-body').innerHTML='<p class="lead">Không tải được dữ liệu. Kiểm tra mạng rồi bấm lại tab Quy định PGS.</p>'}
+}
+
 /* ---------- Ngữ cảnh ---------- */
 let lastCtx=null;
 function setCtx(p){
@@ -403,13 +570,18 @@ function boot(){
   jump(m?+m[1]:1,!m);
 
   document.addEventListener('click',ev=>{
-    const t=ev.target.closest('[data-p],[data-goto],[data-orig],[data-dl],[data-tog],[data-retry],[data-tab]'); if(!t) return;
+    const t=ev.target.closest('[data-p],[data-goto],[data-orig],[data-dl],[data-tog],[data-retry],[data-tab],[data-rf],[data-rfil],[data-rgo]'); if(!t) return;
     if(t.dataset.tab){
       document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b===t));
-      ['toc','arts','find'].forEach(n=>$('#tab-'+n).hidden=n!==t.dataset.tab);
+      ['toc','arts','find','reg'].forEach(n=>$('#tab-'+n).hidden=n!==t.dataset.tab);
+      if(t.dataset.tab==='reg'){showReg();$('#app').classList.remove('open')}
+      else if(REGMODE) setReg(false);
       if(t.dataset.tab==='find') $('#q').focus();
       if(t.dataset.tab==='arts'){const c=$('.card.on'); if(c) c.scrollIntoView({block:'nearest'})}
     }
+    else if(t.dataset.rf) openFile(t.dataset.rf,t.dataset.mime,+t.dataset.page||0,t.dataset.dlname||'',t);
+    else if(t.dataset.rfil){RF=t.dataset.rfil;document.querySelectorAll('[data-rfil]').forEach(b=>b.setAttribute('aria-pressed',b===t));filterJ()}
+    else if(t.dataset.rgo){setReg(true);const e=document.getElementById(t.dataset.rgo);if(e)e.scrollIntoView({block:'start'});$('#app').classList.remove('open')}
     else if(t.dataset.tog){const k=document.getElementById('k'+t.dataset.tog);k.hidden=!k.hidden;t.textContent=k.hidden?'▸':'▾'}
     else if(t.dataset.retry){const p=+t.dataset.retry;drop(p);want(p)}
     else if(t.dataset.orig) openOrig(+t.dataset.orig,t,false);
@@ -424,7 +596,7 @@ function boot(){
   $('#menu').onclick=()=>$('#app').classList.add('open');
   $('#scrim').onclick=()=>$('#app').classList.remove('open');
   $('#q').addEventListener('input',()=>{clearTimeout(qTimer);qTimer=setTimeout(runSearch,250)});
-  let rz;new ResizeObserver(()=>{clearTimeout(rz);rz=setTimeout(()=>{const c=CUR;layoutWidth();jump(c,true)},150)}).observe(view);
+  let rz;new ResizeObserver(()=>{clearTimeout(rz);rz=setTimeout(()=>{if(REGMODE||!view.clientWidth) return;const c=CUR;layoutWidth();jump(c,true)},150)}).observe(view);
   addEventListener('hashchange',()=>{const h=/^#p=(\d+)$/.exec(location.hash);if(h&&+h[1]!==CUR) jump(+h[1],true)});
   addEventListener('keydown',e=>{
     if(/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
